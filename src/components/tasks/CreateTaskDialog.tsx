@@ -43,6 +43,7 @@ export function CreateTaskDialog({ defaultDate, editTask, onClose, trigger }: Cr
       end_time: form.end_time || null,
       priority: form.priority,
       category: form.category || null,
+      phase: form.phase,
       status: form.status,
     };
 
