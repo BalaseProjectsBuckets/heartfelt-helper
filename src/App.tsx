@@ -8,6 +8,7 @@ import { AppLayout } from "@/components/AppLayout";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import TasksPage from "./pages/TasksPage";
+import KanbanPage from "./pages/KanbanPage";
 import CalendarPage from "./pages/CalendarPage";
 import AIChatPage from "./pages/AIChatPage";
 import NotFound from "./pages/NotFound";
