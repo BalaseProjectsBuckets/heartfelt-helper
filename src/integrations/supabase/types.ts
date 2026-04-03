@@ -129,6 +129,36 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          phone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       tasks: {
         Row: {
           category: string | null
@@ -140,6 +170,7 @@ export type Database = {
           id: string
           notes: string | null
           parent_task_id: string | null
+          phase: string | null
           plan_id: string | null
           priority: string
           rescheduled_to: string | null
@@ -162,6 +193,7 @@ export type Database = {
           id?: string
           notes?: string | null
           parent_task_id?: string | null
+          phase?: string | null
           plan_id?: string | null
           priority?: string
           rescheduled_to?: string | null
@@ -184,6 +216,7 @@ export type Database = {
           id?: string
           notes?: string | null
           parent_task_id?: string | null
+          phase?: string | null
           plan_id?: string | null
           priority?: string
           rescheduled_to?: string | null

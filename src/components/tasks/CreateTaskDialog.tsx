@@ -29,6 +29,7 @@ export function CreateTaskDialog({ defaultDate, editTask, onClose, trigger }: Cr
     end_time: editTask?.end_time?.slice(0, 5) || '',
     priority: editTask?.priority || 'medium',
     category: editTask?.category || '',
+    phase: (editTask as any)?.phase || 'planning',
     status: editTask?.status || 'pending',
   });
 
@@ -42,6 +43,7 @@ export function CreateTaskDialog({ defaultDate, editTask, onClose, trigger }: Cr
       end_time: form.end_time || null,
       priority: form.priority,
       category: form.category || null,
+      phase: form.phase,
       status: form.status,
     };
 
@@ -104,9 +106,26 @@ export function CreateTaskDialog({ defaultDate, editTask, onClose, trigger }: Cr
               <Input type="time" value={form.end_time} onChange={e => setForm(f => ({ ...f, end_time: e.target.value }))} />
             </div>
           </div>
-          <div>
-            <Label>Category</Label>
-            <Input value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))} placeholder="e.g. English, GK, Quant" />
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <Label>Category</Label>
+              <Input value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))} placeholder="e.g. English, GK" />
+            </div>
+            <div>
+              <Label>Phase</Label>
+              <Select value={form.phase} onValueChange={v => setForm(f => ({ ...f, phase: v }))}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="planning">Planning</SelectItem>
+                  <SelectItem value="requirements">Requirements</SelectItem>
+                  <SelectItem value="design">Design</SelectItem>
+                  <SelectItem value="development">Development</SelectItem>
+                  <SelectItem value="testing">Testing</SelectItem>
+                  <SelectItem value="deployment">Deployment</SelectItem>
+                  <SelectItem value="maintenance">Maintenance</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
           {editTask && (
             <div>

@@ -8,6 +8,7 @@ import { AppLayout } from "@/components/AppLayout";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import TasksPage from "./pages/TasksPage";
+import KanbanPage from "./pages/KanbanPage";
 import CalendarPage from "./pages/CalendarPage";
 import AIChatPage from "./pages/AIChatPage";
 import NotFound from "./pages/NotFound";
@@ -40,6 +41,7 @@ const App = () => (
             <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
               <Route path="/" element={<Dashboard />} />
               <Route path="/tasks" element={<TasksPage />} />
+              <Route path="/board" element={<KanbanPage />} />
               <Route path="/calendar" element={<CalendarPage />} />
               <Route path="/ai-chat" element={<AIChatPage />} />
             </Route>

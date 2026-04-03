@@ -1,11 +1,12 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/lib/auth';
-import { LayoutDashboard, CalendarDays, ListTodo, MessageSquare, Sparkles, LogOut, Plus } from 'lucide-react';
+import { LayoutDashboard, CalendarDays, ListTodo, MessageSquare, Sparkles, LogOut, Plus, Kanban } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
   { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
   { icon: ListTodo, label: 'Tasks', path: '/tasks' },
+  { icon: Kanban, label: 'Board', path: '/board' },
   { icon: CalendarDays, label: 'Calendar', path: '/calendar' },
   { icon: MessageSquare, label: 'AI Planner', path: '/ai-chat' },
 ];
