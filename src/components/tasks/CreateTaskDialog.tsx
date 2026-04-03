@@ -29,6 +29,7 @@ export function CreateTaskDialog({ defaultDate, editTask, onClose, trigger }: Cr
     end_time: editTask?.end_time?.slice(0, 5) || '',
     priority: editTask?.priority || 'medium',
     category: editTask?.category || '',
+    phase: (editTask as any)?.phase || 'planning',
     status: editTask?.status || 'pending',
   });
 
