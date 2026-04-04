@@ -71,9 +71,9 @@ export default function AdminUsers() {
       .from('profiles')
       .select('user_id, full_name, phone, created_at');
 
-    const { data: roles } = await supabase
-      .from('user_roles')
-      .select('user_id, role');
+    const { data: roles } = await (supabase
+      .from('user_roles' as any)
+      .select('user_id, role') as any);
 
     const { data: tasks } = await supabase
       .from('tasks')
@@ -122,7 +122,7 @@ export default function AdminUsers() {
   };
 
   const changeRole = async (userId: string, newRole: string) => {
-    await supabase.from('user_roles').update({ role: newRole }).eq('user_id', userId);
+    await (supabase.from('user_roles' as any).update({ role: newRole }).eq('user_id', userId) as any);
     fetchUsers();
     if (selectedUser?.user_id === userId) setSelectedUser(prev => prev ? { ...prev, role: newRole } : null);
   };
