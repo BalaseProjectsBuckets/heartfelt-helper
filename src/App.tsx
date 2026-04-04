@@ -32,31 +32,37 @@ function AuthRoute() {
   return <Auth />;
 }
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
+function AppRoutes() {
+  return (
     <AuthProvider>
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/auth" element={<AuthRoute />} />
-            <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/tasks" element={<TasksPage />} />
-              <Route path="/calendar" element={<CalendarPage />} />
-              <Route path="/ai-chat" element={<AIChatPage />} />
-            </Route>
-            <Route element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
-              <Route path="/admin" element={<AdminOverview />} />
-              <Route path="/admin/users" element={<AdminUsers />} />
-              <Route path="/admin/admins" element={<AdminAdmins />} />
-            </Route>
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
+        <Routes>
+          <Route path="/auth" element={<AuthRoute />} />
+          <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/tasks" element={<TasksPage />} />
+            <Route path="/calendar" element={<CalendarPage />} />
+            <Route path="/ai-chat" element={<AIChatPage />} />
+          </Route>
+          <Route element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
+            <Route path="/admin" element={<AdminOverview />} />
+            <Route path="/admin/users" element={<AdminUsers />} />
+            <Route path="/admin/admins" element={<AdminAdmins />} />
+          </Route>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </TooltipProvider>
     </AuthProvider>
+  );
+}
+
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
   </QueryClientProvider>
 );
 
