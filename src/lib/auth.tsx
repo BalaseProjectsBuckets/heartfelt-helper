@@ -27,11 +27,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [role, setRole]       = useState<UserRole | null>(null);
 
   const fetchRole = async (uid: string) => {
-    const { data } = await supabase
-      .from('user_roles')
+    const { data } = await (supabase
+      .from('user_roles' as any)
       .select('role')
       .eq('user_id', uid)
-      .single();
+      .single() as any);
     const r = (data?.role as UserRole) ?? 'user';
     setRole(r);
     return r;

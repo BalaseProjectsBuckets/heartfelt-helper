@@ -69,10 +69,10 @@ export default function AdminAdmins() {
   };
 
   const demoteToUser = async (userId: string) => {
-    const { error } = await supabase
-      .from('user_roles')
+    const { error } = await (supabase
+      .from('user_roles' as any)
       .update({ role: 'user' })
-      .eq('user_id', userId);
+      .eq('user_id', userId) as any);
     if (error) { toast({ title: 'Error', description: error.message, variant: 'destructive' }); return; }
     toast({ title: 'Demoted to user' });
     fetchAdmins();

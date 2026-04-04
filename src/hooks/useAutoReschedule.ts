@@ -11,7 +11,7 @@ export function useAutoReschedule() {
     if (!user) return;
 
     (async () => {
-      const { data, error } = await supabase.rpc('auto_reschedule_overdue_tasks');
+      const { data, error } = await (supabase.rpc('auto_reschedule_overdue_tasks' as any) as any);
       if (!error && data && data > 0) {
         queryClient.invalidateQueries({ queryKey: ['tasks'] });
         queryClient.invalidateQueries({ queryKey: ['task-stats'] });

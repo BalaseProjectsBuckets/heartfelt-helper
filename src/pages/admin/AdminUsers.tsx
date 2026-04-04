@@ -122,7 +122,7 @@ export default function AdminUsers() {
   };
 
   const changeRole = async (userId: string, newRole: string) => {
-    await supabase.from('user_roles').update({ role: newRole }).eq('user_id', userId);
+    await (supabase.from('user_roles' as any).update({ role: newRole }).eq('user_id', userId) as any);
     fetchUsers();
     if (selectedUser?.user_id === userId) setSelectedUser(prev => prev ? { ...prev, role: newRole } : null);
   };
