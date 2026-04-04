@@ -36,10 +36,11 @@ export function TaskChatDrawer({ task, open, onClose }: TaskChatDrawerProps) {
   useEffect(() => {
     if (!open || !user || initialized) return;
     (async () => {
+      const taskConvTitle = `Task: ${task.id}`;
       const { data: existing } = await supabase
         .from('chat_conversations')
         .select('id')
-        .eq('task_id', task.id)
+        .eq('title', taskConvTitle)
         .eq('user_id', user.id)
         .maybeSingle();
 
@@ -47,7 +48,7 @@ export function TaskChatDrawer({ task, open, onClose }: TaskChatDrawerProps) {
       if (!convId) {
         const { data: created } = await supabase
           .from('chat_conversations')
-          .insert({ user_id: user.id, task_id: task.id, title: `Task: ${task.title.slice(0, 50)}` })
+          .insert({ user_id: user.id, title: taskConvTitle })
           .select('id')
           .single();
         convId = created?.id;
