@@ -9,49 +9,53 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { messages } = await req.json();
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+    const { messages, systemPrompt: customSystemPrompt } = await req.json();
+    const HF_TOKEN = Deno.env.get("HF_TOKEN");
+    if (!HF_TOKEN) throw new Error("HF_TOKEN is not configured");
 
-    const systemPrompt = `You are an AI Todo Planner assistant. You help users create structured study plans, work plans, fitness plans, project roadmaps, and any goal-based plans.
+    const defaultSystemPrompt = `You are an AI Todo Planner. Today is ${new Date().toISOString().split('T')[0]}.
 
-When the user asks for a plan, generate a detailed, structured plan. Include:
-- Day-by-day breakdown with specific tasks
-- Time slots when applicable
-- Topics and subtopics
-- YouTube video links when relevant (for study plans)
-- Priority levels (low, medium, high, urgent)
-- Categories/subjects
+When a user gives a plan request, think through this before generating:
 
-IMPORTANT: When generating a plan, output a JSON code block with an array of tasks. Each task should have:
-{
-  "title": "Task title",
-  "description": "Detailed description",
-  "date": "YYYY-MM-DD",
-  "start_time": "HH:MM",
-  "end_time": "HH:MM",
-  "priority": "low|medium|high|urgent",
-  "category": "Subject/Category name",
-  "youtube_links": ["optional urls"]
-}
+1. PARSE: days, hours/day, subjects list, difficulty of each subject
+2. CALCULATE tasks per day = number of subjects (each subject = 1 task per day)
+   - Total tasks = days × subjects (e.g. 7 days × 5 subjects = 35 tasks)
+   - Time per subject = hours / subjects, adjusted by difficulty (harder = more time)
+   - Schedule subjects sequentially in the day: subject1 09:00-10:30, subject2 10:30-12:00, etc.
+3. PRIORITY: days 1-30% = medium, 30-70% = high, 70-100% = urgent
+4. Each task: one subject, one day, specific topic to study that day
 
-Wrap the JSON in a \`\`\`json code block.
+Output ONLY a raw JSON array (no markdown prose before/after, just the array):
+[
+  {
+    "title": "Day 1 — English: Reading Comprehension Basics",
+    "description": "Cover RC passage types, skimming techniques, practice 5 passages",
+    "date": "YYYY-MM-DD",
+    "start_time": "HH:MM",
+    "end_time": "HH:MM",
+    "priority": "medium",
+    "category": "English",
+    "youtube_links": []
+  }
+]
 
-Before the JSON, provide a brief summary of the plan. After the JSON, ask the user if they want to modify anything.
+RULES:
+- Output ONLY the JSON array, nothing else, no explanation
+- Every day must have exactly N tasks where N = number of subjects
+- Time slots must not overlap within a day
+- Harder subjects get longer slots
+- Topics must progress logically day by day (basics → advanced → revision)`;
 
-If the user says the plan is not correct, ask what needs to change and regenerate. Keep chatting until the user is satisfied.
+    const systemPrompt = customSystemPrompt || defaultSystemPrompt;
 
-For partial plans (single day, few hours), generate only the relevant tasks.
-For bulk plans (60 days, monthly), generate tasks spread across the requested timeframe.`;
-
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const response = await fetch("https://router.huggingface.co/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
+        Authorization: `Bearer ${HF_TOKEN}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
+        model: "meta-llama/Meta-Llama-3-8B-Instruct:novita",
         messages: [
           { role: "system", content: systemPrompt },
           ...messages,

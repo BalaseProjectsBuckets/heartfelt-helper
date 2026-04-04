@@ -1,12 +1,11 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/lib/auth';
-import { LayoutDashboard, CalendarDays, ListTodo, MessageSquare, Sparkles, LogOut, Plus, Kanban } from 'lucide-react';
+import { LayoutDashboard, CalendarDays, ListTodo, MessageSquare, Sparkles, LogOut, Plus, ShieldCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
   { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
   { icon: ListTodo, label: 'Tasks', path: '/tasks' },
-  { icon: Kanban, label: 'Board', path: '/board' },
   { icon: CalendarDays, label: 'Calendar', path: '/calendar' },
   { icon: MessageSquare, label: 'AI Planner', path: '/ai-chat' },
 ];
@@ -14,7 +13,7 @@ const navItems = [
 export function AppSidebar() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { signOut, user } = useAuth();
+  const { signOut, user, isAdmin } = useAuth();
 
   return (
     <aside className="w-64 h-screen bg-sidebar border-r border-sidebar-border flex flex-col shrink-0">
@@ -59,6 +58,15 @@ export function AppSidebar() {
           <Plus className="w-4 h-4" />
           New AI Plan
         </button>
+        {isAdmin && (
+          <button
+            onClick={() => navigate('/admin')}
+            className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-sidebar-foreground hover:bg-sidebar-accent/50 transition-colors"
+          >
+            <ShieldCheck className="w-4 h-4" />
+            Admin Panel
+          </button>
+        )}
         <div className="flex items-center justify-between px-3 py-2">
           <span className="text-xs text-sidebar-foreground truncate max-w-[160px]">{user?.email}</span>
           <button onClick={signOut} className="text-sidebar-foreground hover:text-destructive transition-colors">

@@ -7,9 +7,10 @@ import { Progress } from '@/components/ui/progress';
 import { Slider } from '@/components/ui/slider';
 import { Textarea } from '@/components/ui/textarea';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal, Trash2, Edit, CheckCircle2, Clock, XCircle, RefreshCw, ChevronDown, ChevronUp, ExternalLink, StickyNote, Youtube } from 'lucide-react';
+import { MoreHorizontal, Trash2, Edit, CheckCircle2, Clock, XCircle, RefreshCw, ChevronDown, ChevronUp, ExternalLink, StickyNote, Youtube, Bot } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
+import { TaskChatDrawer } from './TaskChatDrawer';
 
 const statusConfig: Record<string, { label: string; className: string; icon: any }> = {
   pending: { label: 'Pending', className: 'bg-muted text-muted-foreground', icon: Clock },
@@ -49,6 +50,7 @@ export function TaskCard({ task, onEdit, selectable, selected, onSelect }: TaskC
   const [expanded, setExpanded] = useState(false);
   const [editingNotes, setEditingNotes] = useState(false);
   const [notes, setNotes] = useState(task.notes || '');
+  const [chatOpen, setChatOpen] = useState(false);
   const status = statusConfig[task.status] || statusConfig.pending;
   const StatusIcon = status.icon;
 
@@ -124,10 +126,18 @@ export function TaskCard({ task, onEdit, selectable, selected, onSelect }: TaskC
                 <span className="flex items-center gap-0.5"><Youtube className="w-3 h-3" />{task.youtube_links.length}</span>
               )}
               {task.notes && <StickyNote className="w-3 h-3" />}
+              {task.status === 'rescheduled' && task.rescheduled_to && (
+                <span className="flex items-center gap-1 text-[10px] text-blue-400 font-mono">
+                  <RefreshCw className="w-3 h-3" />→ {task.rescheduled_to}
+                </span>
+              )}
             </div>
           </div>
 
           <div className="flex items-center gap-1 shrink-0">
+            <Button variant="ghost" size="icon" className="h-7 w-7" title="AI Chat" onClick={() => setChatOpen(true)}>
+              <Bot className="w-4 h-4 text-primary" />
+            </Button>
             <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setExpanded(!expanded)}>
               {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </Button>
@@ -247,6 +257,7 @@ export function TaskCard({ task, onEdit, selectable, selected, onSelect }: TaskC
           </motion.div>
         )}
       </AnimatePresence>
+      <TaskChatDrawer task={task} open={chatOpen} onClose={() => setChatOpen(false)} />
     </motion.div>
   );
 }

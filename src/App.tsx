@@ -5,12 +5,15 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider, useAuth } from "@/lib/auth";
 import { AppLayout } from "@/components/AppLayout";
+import { AdminLayout } from "@/components/admin/AdminLayout";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import TasksPage from "./pages/TasksPage";
-import KanbanPage from "./pages/KanbanPage";
 import CalendarPage from "./pages/CalendarPage";
 import AIChatPage from "./pages/AIChatPage";
+import AdminOverview from "./pages/admin/AdminOverview";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminAdmins from "./pages/admin/AdminAdmins";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -41,9 +44,13 @@ const App = () => (
             <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
               <Route path="/" element={<Dashboard />} />
               <Route path="/tasks" element={<TasksPage />} />
-              <Route path="/board" element={<KanbanPage />} />
               <Route path="/calendar" element={<CalendarPage />} />
               <Route path="/ai-chat" element={<AIChatPage />} />
+            </Route>
+            <Route element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
+              <Route path="/admin" element={<AdminOverview />} />
+              <Route path="/admin/users" element={<AdminUsers />} />
+              <Route path="/admin/admins" element={<AdminAdmins />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
