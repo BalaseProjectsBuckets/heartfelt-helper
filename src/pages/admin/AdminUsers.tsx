@@ -71,9 +71,9 @@ export default function AdminUsers() {
       .from('profiles')
       .select('user_id, full_name, phone, created_at');
 
-    const { data: roles } = await supabase
-      .from('user_roles')
-      .select('user_id, role');
+    const { data: roles } = await (supabase
+      .from('user_roles' as any)
+      .select('user_id, role') as any);
 
     const { data: tasks } = await supabase
       .from('tasks')
