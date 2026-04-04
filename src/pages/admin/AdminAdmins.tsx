@@ -31,11 +31,11 @@ export default function AdminAdmins() {
 
   const fetchAdmins = async () => {
     setLoading(true);
-    const { data: roles } = await supabase
-      .from('user_roles')
+    const { data: roles } = await (supabase
+      .from('user_roles' as any)
       .select('user_id, role, created_at')
       .in('role', ['admin', 'super_admin'])
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false }) as any);
 
     if (!roles?.length) { setRows([]); setLoading(false); return; }
 
