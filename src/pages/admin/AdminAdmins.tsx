@@ -59,10 +59,10 @@ export default function AdminAdmins() {
   useEffect(() => { fetchAdmins(); }, []);
 
   const changeRole = async (userId: string, newRole: string) => {
-    const { error } = await supabase
-      .from('user_roles')
+    const { error } = await (supabase
+      .from('user_roles' as any)
       .update({ role: newRole })
-      .eq('user_id', userId);
+      .eq('user_id', userId) as any);
     if (error) { toast({ title: 'Error', description: error.message, variant: 'destructive' }); return; }
     toast({ title: `Role updated to ${newRole.replace('_', ' ')}` });
     fetchAdmins();
