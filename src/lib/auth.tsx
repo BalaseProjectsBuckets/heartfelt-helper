@@ -1,7 +1,6 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
-import { useNavigate } from 'react-router-dom';
 
 type UserRole = 'super_admin' | 'admin' | 'user';
 
@@ -37,8 +36,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return r;
   };
 
-  const navigate = useNavigate();
-
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setSession(session);
@@ -51,9 +48,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           const intent = sessionStorage.getItem('google_login_intent');
           sessionStorage.removeItem('google_login_intent');
           if (r === 'super_admin' || r === 'admin') {
-            navigate(intent === 'admin' || r === 'super_admin' || r === 'admin' ? '/admin' : '/');
+            window.location.replace(intent === 'admin' || r === 'super_admin' || r === 'admin' ? '/admin' : '/');
           } else {
-            navigate('/');
+            window.location.replace('/');
           }
         }
       } else {
